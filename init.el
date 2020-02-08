@@ -157,10 +157,13 @@
 ;(require 'switch-window)
 (global-set-key (kbd "C-x o") 'switch-window)
 
+;; undo shortcut
+(global-set-key [f1] 'undo)
 
+;
 
 ;; shell shortcut
-(global-set-key [f1] 'shell)
+(global-set-key [f6] 'shell)
 
 ;; eval buffer
 (global-set-key [f5] 'eval-buffer)
@@ -280,6 +283,77 @@
 		       (lsp)
 		       (flycheck-mode t)
 		       (add-to-list 'lsp-language-id-configuration '(vhdl-mode . "vhdl")))))
+
+
+;; system verilog
+;(use-package verilog-mode
+ ;  :defer t
+  ; :config
+  ; (require 'lsp)
+  ; (lsp-register-client
+  ;  (make-lsp-client :new-connection (lsp-stdio-connection '("svls"))
+;		    :major-modes '(verilog-mode)
+;		    :priority -1
+;		    ))
+ ;  :hook (verilog-mode . (lambda()
+;		       (lsp)
+;		       (flycheck-mode t)
+;		       (add-to-list 'lsp-language-id-configuration '(verilog-mode . "verilog")))))
+
+
+;; verilog
+;; flymake
+(require 'flymake)
+
+(defadvice flymake-post-syntax-check
+  (before flymake-force-check-was-interrupted)
+  (setq flymake-check-was-interrupted t))
+(ad-activate 'flymake-post-syntax-check)
+
+
+(defun flymake-verilog-init()
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy 'flymake-create-temp-inplace))
+	 (main-file (file-relative-name temp-file (file-name-directory buffer-file-name)))
+	 (sub-files (flymake-verilog-get-files)))
+    (list "verilator_bin" (append (list "--lint-only -Wall" main-file) sub-files))))
+
+(defun flymake-verilog-get-files()
+  (save-excursion
+    (goto-char (point-min))
+    (if (re-search-forward "verilog-library-files:( *\"\\([^)]+\\)\" *)" nil t)
+	(split-string (match-string-no-properties 1) "\" *\"") (list))))
+
+;; Verilog HDLのファイル拡張子と初期化関数を登録する
+(push '(".+\\.s?v$" flymake-verilog-init) flymake-allowed-file-name-masks)
+
+;; エラーメッセージのパターンを登録する
+(push '("^%.+: \\(.+\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
+
+;; verilog-modeでflymakeを有効にする
+(add-hook 'verilog-mode-hook '(lambda () (flymake-mode t)))
+
+
+
+;; (use-package flycheck
+;;   :diminish flycheck-mode
+;;   :defer t
+;;   :bind
+;;   (("M-l" . flycheck-list-errors )
+;;    ("M-p" . flycheck-previous-error)
+;;    ("M-n" . flycheck-next-error))
+;;   :hook
+;;   (after-init . global-flycheck-mode)
+;;   :init
+;;   (add-to-list `display-buffer-alist
+;;	       `(,(rx bos "*Flycheck errors*" eos)
+;;		 (display-buffer-reuse-window
+;;		  display-buffer-in-side-window)
+;;		 (side            . bottom)
+;;		 (reusable-frames . visible)
+;;		 (window-height   . 0.125)))
+;;   :config
+;;   (setq flycheck-find-checker-executable `verilog-verilator))
+
 ;; cmake mode
 (setq auto-mode-alist
       (append
@@ -290,8 +364,6 @@
 (autoload 'cmake-mode "~/.emacs.d/cmake-mode.el" t)
 
 
-
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -299,9 +371,10 @@
  ;; If there is more than one, they won't work right.
  '(flycheck-ghdl-workdir
    "C:\\Users\\otutaysalgir\\Desktop\\osmant\\Codes\\Projects\\DDSWithEth\\srcRTL")
+ '(lsp-vhdl-server (quote hdl-checker))
  '(package-selected-packages
    (quote
-    (company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete))))
+    (dumb-jump company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
