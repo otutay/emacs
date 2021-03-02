@@ -65,6 +65,8 @@
    autopair
    solarized-theme
    autopair
+   yasnippet
+   format-all
 ))
 
 ;; Package manager and packages handler
@@ -303,56 +305,86 @@
 
 ;; verilog
 ;; flymake
-(require 'flymake)
 
-(defadvice flymake-post-syntax-check
-  (before flymake-force-check-was-interrupted)
-  (setq flymake-check-was-interrupted t))
-(ad-activate 'flymake-post-syntax-check)
+(require 'flymake)										     ;;
+												     ;;
+(defadvice flymake-post-syntax-check								     ;;
+  (before flymake-force-check-was-interrupted)						     ;;
+  (setq flymake-check-was-interrupted t))							     ;;
+(ad-activate 'flymake-post-syntax-check)							     ;;
+												     ;;
+												     ;;
+(defun flymake-verilog-init()								     ;;
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy 'flymake-create-temp-inplace))	     ;;
+	 (main-file (file-relative-name temp-file (file-name-directory buffer-file-name)))	     ;;
+	 (sub-files (flymake-verilog-get-files)))						     ;;
+    (list "verilator_bin" (append (list "--lint-only -Wall" main-file) sub-files))))		     ;;
+												     ;;
+(defun flymake-verilog-get-files()								     ;;
+  (save-excursion										     ;;
+    (goto-char (point-min))									     ;;
+    (if (re-search-forward "verilog-library-files:( *\"\\([^)]+\\)\" *)" nil t)		     ;;
+	(split-string (match-string-no-properties 1) "\" *\"") (list))))			     ;;
+												     ;;
+;; Verilog HDLのファイル拡張子と初期化関数を登録する						     ;;
+(push '(".+\\.s?v$" flymake-verilog-init) flymake-allowed-file-name-masks)			     ;;
+												     ;;
+;; エラーメッセージのパターンを登録する							     ;;
+(push '("^%.+: \\(.+\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)	     ;;
+												     ;;
+;; verilog-modeでflymakeを有効にする								     ;;
+(add-hook 'verilog-mode-hook '(lambda () (flymake-mode t)))					     ;;
 
 
-(defun flymake-verilog-init()
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy 'flymake-create-temp-inplace))
-	 (main-file (file-relative-name temp-file (file-name-directory buffer-file-name)))
-	 (sub-files (flymake-verilog-get-files)))
-    (list "verilator_bin" (append (list "--lint-only -Wall" main-file) sub-files))))
-
-(defun flymake-verilog-get-files()
-  (save-excursion
-    (goto-char (point-min))
-    (if (re-search-forward "verilog-library-files:( *\"\\([^)]+\\)\" *)" nil t)
-	(split-string (match-string-no-properties 1) "\" *\"") (list))))
-
-;; Verilog HDLのファイル拡張子と初期化関数を登録する
-(push '(".+\\.s?v$" flymake-verilog-init) flymake-allowed-file-name-masks)
-
-;; エラーメッセージのパターンを登録する
-(push '("^%.+: \\(.+\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
-
-;; verilog-modeでflymakeを有効にする
-(add-hook 'verilog-mode-hook '(lambda () (flymake-mode t)))
 
 
+(use-package flycheck
+   :diminish flycheck-mode
+   :defer t
+   :bind
+   (("M-l" . flycheck-list-errors )
+    ("M-p" . flycheck-previous-error)
+    ("M-n" . flycheck-next-error))
+    :hook
+   (after-init . global-flycheck-mode)
+   :init
+   (add-to-list `display-buffer-alist
+	       `(,(rx bos "*Flycheck errors*" eos)
+		 (display-buffer-reuse-window
+		  display-buffer-in-side-window)
+		 (side            . bottom)
+		 (reusable-frames . visible)
+		 (window-height   . 0.125)))
+   :config
+   (setq flycheck-find-checker-executable `verilog-verilator))
 
-;; (use-package flycheck
-;;   :diminish flycheck-mode
-;;   :defer t
-;;   :bind
-;;   (("M-l" . flycheck-list-errors )
-;;    ("M-p" . flycheck-previous-error)
-;;    ("M-n" . flycheck-next-error))
-;;   :hook
-;;   (after-init . global-flycheck-mode)
-;;   :init
-;;   (add-to-list `display-buffer-alist
-;;	       `(,(rx bos "*Flycheck errors*" eos)
-;;		 (display-buffer-reuse-window
-;;		  display-buffer-in-side-window)
-;;		 (side            . bottom)
-;;		 (reusable-frames . visible)
-;;		 (window-height   . 0.125)))
-;;   :config
-;;   (setq flycheck-find-checker-executable `verilog-verilator))
+
+;; yassnippet addon
+
+(require 'yasnippet)
+(add-to-list 'yas-snippet-dirs "/.emacs.d/snippets/")
+(yas-global-mode +1)
+
+
+
+;;ctags
+(defun create-tags (dir-name)
+    "Create tags file."
+    (interactive "DDirectory: ")
+    (shell-command
+     ;(format "%s -f TAGS -e -R %s" "ctags-exuberant" (directory-file-name dir-name)))
+     (format "%s -eR %s/*.sv" "ctags" (directory-file-name dir-name)))
+	; (format "%s -f TAGS -eR %s" "ctags-exuberant" (directory-file-name dir-name)))
+  )
+
+;(defun find-tag-next ()
+;  (interactive)
+;  (find-tag last-tag t))
+;(global-set-key (kbd "M-g .")   'find-tag-regexp)
+;(global-set-key (kbd "M->")     'find-tag-next)
+;(global-set-key (kbd "M-,")     'find-tag-other-window)
+;(global-set-key (kbd "M-g M-.") 'anything-c-etags-select)
+
 
 ;; cmake mode
 (setq auto-mode-alist
