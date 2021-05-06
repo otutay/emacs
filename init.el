@@ -8,6 +8,8 @@
 ;; show corresponding parenthesis
 (show-paren-mode t)
 
+;; global delete button to delete
+
 ;;highlight tabulations
 (setq-default highlight-tabs t)
 
@@ -64,6 +66,8 @@
    auto-complete
    autopair
    solarized-theme
+   cyberpunk-theme
+   spacemacs-theme
    autopair
    yasnippet
    format-all
@@ -109,24 +113,26 @@
 (install-wanted-packages)
 
 ;load solarized theme
-;;(load-theme 'solarized-dark t)
-(load-theme 'dracula t)
+(load-theme 'solarized-dark t)
+;;(load-theme 'spacemacs-dark t)
+
+;;(load-theme 'dracula t)
 
 
 ;; dirty fix for having AC everywhere
-(define-globalized-minor-mode real-global-auto-complete-mode
-  auto-complete-mode (lambda ()
-		       (if (not (minibufferp (current-buffer)))
-			 (auto-complete-mode 1))
-		       ))
-(real-global-auto-complete-mode t)
+;; (define-globalized-minor-mode real-global-auto-complete-mode
+;;   auto-complete-mode (lambda ()
+;;		       (if (not (minibufferp (current-buffer)))
+;;			 (auto-complete-mode 1))
+;;		       ))
+;; (real-global-auto-complete-mode t)
 
 
 ;; autopair open in all buffer
 (require 'autopair)
 (autopair-global-mode) ;; enable autopair in all buffers
 
-
+(setq vhdl-reset-kind 'None)
 ;; flycheck en
 (global-flycheck-mode)
 
@@ -176,10 +182,10 @@
 (when (not (package-installed-p 'use-package))
   (package-install 'use-package))
 
-(use-package flycheck
-  :ensure t
-  :defer t
-  :init (global-flycheck-mode t))
+;; (use-package flycheck
+;;   :ensure t
+;;   :defer t
+;;   :init (global-flycheck-mode t))
 
 (use-package company
   :ensure t
@@ -208,83 +214,83 @@
 
 
 
-(use-package lsp-mode
-  :defer t
-  :ensure t
-  :commands lsp
-  :config
-  (setq lsp-log-io nil
-	lsp-auto-configure t
-	lsp-auto-guess-root t
-	lsp-enable-completion-at-point t
-	lsp-enable-xref t
-	lsp-prefer-flymake nil
-	lsp-use-native-json t
-	lsp-enable-indentation t
-	lsp-response-timeout 10
-	lsp-restart 'auto-restart
-	lsp-keep-workspace-alive t
-	lsp-eldoc-render-all nil
-	lsp-enable-snippet nil
-	lsp-enable-folding t)
-   ;;; lsp-ui gives us the blue documentation boxes and the sidebar info
-  (use-package lsp-ui
-    :defer t
-    :ensure t
-    :after lsp
-    :commands lsp-ui-mode
-    :config
-    (setq lsp-ui-sideline-ignore-duplicate t
-	  lsp-ui-sideline-delay 0.5
-	  lsp-ui-sideline-show-symbol t
-	  lsp-ui-sideline-show-hover t
-	  lsp-ui-sideline-show-diagnostics t
-	  lsp-ui-sideline-show-code-actions t
-	  lsp-ui-peek-always-show t
-	  lsp-ui-doc-use-childframe t)
-    :bind
-    (:map lsp-ui-mode-map
-	  ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-	  ([remap xref-find-references] . lsp-ui-peek-find-references))
-    :hook
-    ((lsp-mode . lsp-ui-mode)
-     (lsp-after-open . (lambda ()
-			 (lsp-ui-flycheck-enable t)
-			 (lsp-ui-sideline-enable t)
-			 (lsp-ui-imenu-enable t)
-			 (lsp-lens-mode t)
-			 (lsp-ui-peek-enable t)
-			 (lsp-ui-doc-enable t)))))
-  ;;; company lsp
-  ;; install LSP company backend for LSP-driven completion
-  (use-package company-lsp
-    :defer t
-    :ensure t
-    :after company
-    :commands company-lsp
-    :config
-    (setq company-lsp-cache-candidates t
-	  company-lsp-enable-recompletion t
-	  company-lsp-enable-snippet t
-	  company-lsp-async t)
-    ;; avoid, as this changes it globally do it in the major mode instead (push
-    ;; 'company-lsp company-backends) better set it locally
-    :hook (lsp-after-open . (lambda()
-			      (add-to-list (make-local-variable 'company-backends)
-					   'company-lsp)))))
-(use-package vhdl-mode
-  :defer t
-  :config
-  (require 'lsp)
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection '("ghdl-ls" "-v" "--trace-file=/home/otutay/.emacs.d/vhdl-ls.trace"))
-		    :major-modes '(vhdl-mode)
-		    :priority -1
-		    :server-id 'lsp-vhdl-mode))
-  :hook (vhdl-mode . (lambda()
-		       (lsp)
-		       (flycheck-mode t)
-		       (add-to-list 'lsp-language-id-configuration '(vhdl-mode . "vhdl")))))
+;; (use-package lsp-mode
+;;   :defer t
+;;   :ensure t
+;;   :commands lsp
+;;   :config
+;;   (setq lsp-log-io nil
+;;	lsp-auto-configure t
+;;	lsp-auto-guess-root t
+;;	lsp-enable-completion-at-point t
+;;	lsp-enable-xref t
+;;	lsp-prefer-flymake nil
+;;	lsp-use-native-json t
+;;	lsp-enable-indentation t
+;;	lsp-response-timeout 10
+;;	lsp-restart 'auto-restart
+;;	lsp-keep-workspace-alive t
+;;	lsp-eldoc-render-all nil
+;;	lsp-enable-snippet nil
+;;	lsp-enable-folding t)
+;;    ;;; lsp-ui gives us the blue documentation boxes and the sidebar info
+;;   (use-package lsp-ui
+;;     :defer t
+;;     :ensure t
+;;     :after lsp
+;;     :commands lsp-ui-mode
+;;     :config
+;;     (setq lsp-ui-sideline-ignore-duplicate t
+;;	  lsp-ui-sideline-delay 0.5
+;;	  lsp-ui-sideline-show-symbol t
+;;	  lsp-ui-sideline-show-hover t
+;;	  lsp-ui-sideline-show-diagnostics t
+;;	  lsp-ui-sideline-show-code-actions t
+;;	  lsp-ui-peek-always-show t
+;;	  lsp-ui-doc-use-childframe t)
+;;     :bind
+;;     (:map lsp-ui-mode-map
+;;	  ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+;;	  ([remap xref-find-references] . lsp-ui-peek-find-references))
+;;     :hook
+;;     ((lsp-mode . lsp-ui-mode)
+;;      (lsp-after-open . (lambda ()
+;;			 (lsp-ui-flycheck-enable t)
+;;			 (lsp-ui-sideline-enable t)
+;;			 (lsp-ui-imenu-enable t)
+;;			 (lsp-lens-mode t)
+;;			 (lsp-ui-peek-enable t)
+;;			 (lsp-ui-doc-enable t)))))
+;;   ;;; company lsp
+;;   ;; install LSP company backend for LSP-driven completion
+;;   (use-package company-lsp
+;;     :defer t
+;;     :ensure t
+;;     :after company
+;;     :commands company-lsp
+;;     :config
+;;     (setq company-lsp-cache-candidates t
+;;	  company-lsp-enable-recompletion t
+;;	  company-lsp-enable-snippet t
+;;	  company-lsp-async t)
+;;     ;; avoid, as this changes it globally do it in the major mode instead (push
+;;     ;; 'company-lsp company-backends) better set it locally
+;;     :hook (lsp-after-open . (lambda()
+;;			      (add-to-list (make-local-variable 'company-backends)
+;;					   'company-lsp)))))
+;; (use-package vhdl-mode
+;;   :defer t
+;;   :config
+;;   (require 'lsp)
+;;   (lsp-register-client
+;;    (make-lsp-client :new-connection (lsp-stdio-connection '("ghdl-ls" "-v" "--trace-file=/home/otutay/.emacs.d/vhdl-ls.trace"))
+;;		    :major-modes '(vhdl-mode)
+;;		    :priority -1
+;;		    :server-id 'lsp-vhdl-mode))
+;;   :hook (vhdl-mode . (lambda()
+;;		       (lsp)
+;;		       (flycheck-mode t)
+;;		       (add-to-list 'lsp-language-id-configuration '(vhdl-mode . "vhdl")))))
 
 
 ;; system verilog
@@ -368,15 +374,22 @@
 
 
 ;;ctags
+;;(defun  create-tags-sv (dir-name)
+  ;;   "Create tags file."
+  ;;   (interactive "DDirectory: ")
+  ;;   (shell-command
+  ;;    ;(format "%s -f TAGS -e -R %s" "ctags-exuberant" (directory-file-name dir-name)))
+  ;;    (format "%s -eR %s/*.sv" "ctags" (directory-file-name dir-name)))
+  ;;	; (format "%s -f TAGS -eR %s" "ctags-exuberant" (directory-file-name dir-name)))
+  ;; )
 (defun create-tags (dir-name)
     "Create tags file."
     (interactive "DDirectory: ")
     (shell-command
      ;(format "%s -f TAGS -e -R %s" "ctags-exuberant" (directory-file-name dir-name)))
-     (format "%s -eR %s/*.sv" "ctags" (directory-file-name dir-name)))
+     (format "%s -eR %s/*.vhd" "ctags" (directory-file-name dir-name)))
 	; (format "%s -f TAGS -eR %s" "ctags-exuberant" (directory-file-name dir-name)))
   )
-
 ;(defun find-tag-next ()
 ;  (interactive)
 ;  (find-tag last-tag t))
@@ -406,7 +419,7 @@
  '(lsp-vhdl-server (quote hdl-checker))
  '(package-selected-packages
    (quote
-    (dumb-jump company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete))))
+    (spacemacs-theme spacemacs-dark spacemacs-dark-theme tango-dark-theme cyberpunk-theme dumb-jump company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
