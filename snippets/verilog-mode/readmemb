@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+#name : readmemb
+#key : $readmemb
+#contributor : Manuel Eggimann
+# --
+$readmemb(${1:"Filename"},${2:dst_array});
+$0

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : clog2
+#key : $clog2
+#contributor : Manuel Eggimann
+# --
+$clog2($0)

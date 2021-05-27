@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+#name : New Module
+#key : module
+#contributor : Manuel Eggimann
+# --
+module ${1:name}
+${2:import ${3:package};
+}${4:#(parameter ${5:NAME})
+}(${6:${7:type} ${8:name}});
+$0
+endmodule : $1

@@ -1,0 +1,26 @@
+# -*- mode: snippet -*-
+# name: PULP Header Solderpad
+# key: header-pulp-sldpad
+# --
+
+//-----------------------------------------------------------------------------
+// Title         : $1
+//-----------------------------------------------------------------------------
+// File          : `(buffer-name)`
+// Author        : Manuel Eggimann  <meggimann@iis.ee.ethz.ch>
+// Created       : `(format-time-string "%d.%m.%Y")`
+//-----------------------------------------------------------------------------
+// Description :
+// $2
+//-----------------------------------------------------------------------------
+// Copyright (C) 2013-`(format-time-string "%Y")` ETH Zurich, University of Bologna
+// Copyright and related rights are licensed under the Solderpad Hardware
+// License, Version 0.51 (the "License"); you may not use this file except in
+// compliance with the License. You may obtain a copy of the License at
+// http://solderpad.org/licenses/SHL-0.51. Unless required by applicable law
+// or agreed to in writing, software, hardware and materials distributed under
+// this License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+// CONDITIONS OF ANY KIND, either express or implied. See the License for the
+// specific language governing permissions and limitations under the License.
+//-----------------------------------------------------------------------------
+$0

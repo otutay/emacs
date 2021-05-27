@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+#name : package
+#key : package
+#contributor : Manuel Eggimann
+# --
+package ${1:pkg_name};
+$0
+endpackage : $1

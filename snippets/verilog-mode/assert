@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : assert
+#key : assert
+#contributor : Manuel Eggimann
+# --
+assert($0)

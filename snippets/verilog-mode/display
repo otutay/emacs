@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : display
+#key : $display
+#contributor : Manuel Eggimann
+# --
+$display($0)

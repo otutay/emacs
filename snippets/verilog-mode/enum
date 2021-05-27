@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : enum
+#key : enum
+#contributor : Manuel Eggimann
+# --
+typedef enum ${1:logic[${2:7}:${3:0}]} {$0} ${4:name_e};

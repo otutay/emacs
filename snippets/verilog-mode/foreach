@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+#name : foreach
+#key : foreach
+#contributor : Manuel Eggimann
+# --
+foreach(${1:variable}[${2:i}]) begin
+$0
+end

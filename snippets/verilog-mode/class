@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+#name : class
+#key : class
+#contributor : Manuel Eggimann
+# --
+class ${1:classname};
+${2:fields}
+function new (${3:args});
+$0
+endfunction
+endclass

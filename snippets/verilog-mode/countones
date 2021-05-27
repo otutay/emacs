@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : countones
+#key : $countones
+#contributor : Manuel Eggimann
+# --
+$countones($0)

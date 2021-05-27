@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+#name : generate
+#key : ifgen
+#contributor : otutay
+# --
+generate
+	if($0)begin
+
+	end
+endgenerate

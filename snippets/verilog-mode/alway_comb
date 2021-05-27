@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+#name : alway_comb
+#key : acm
+#contributor : Manuel Eggimann
+# --
+always_comb begin : $0
+end

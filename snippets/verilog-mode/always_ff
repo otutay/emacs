@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+#name : always_ff
+#key : aff
+#contributor : Manuel Eggimann
+# --
+always_ff @(posedge iClk) begin
+	  $0
+end

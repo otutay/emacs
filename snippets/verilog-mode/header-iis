@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+#name : header-iis
+#key : header-iis
+#contributor : Manuel Eggimann
+# --
+// -----------------------------------------------------------------------------
+// Title      : $1
+// Project    : $2
+// -----------------------------------------------------------------------------
+// File       : `(buffer-name)`
+// Author     : Manuel Eggimann <meggimann@iis.ee.ethz.ch>
+// Company    : Integrated Systems Laboratory, ETH Zurich
+// Created    : `(format-time-string "%d.%m.%Y")`
+// -----------------------------------------------------------------------------
+// Description: $3
+// -----------------------------------------------------------------------------
+// Copyright (c) `(format-time-string "%Y")` Integrated Systems Laboratory, ETH Zurich
+// -----------------------------------------------------------------------------
+$0

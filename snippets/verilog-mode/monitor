@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : monitor
+#key : $monitor
+#contributor : Manuel Eggimann
+# --
+$monitor($0)

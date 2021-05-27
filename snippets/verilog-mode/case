@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+#name : case statement
+#key : case
+#contributor : Manuel Eggimann
+# --
+
+case (${1:expression})
+${2:condition}: begin
+$0
+end
+
+default: begin
+
+end
+endcase

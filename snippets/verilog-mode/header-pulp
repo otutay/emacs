@@ -1,0 +1,24 @@
+# -*- mode: snippet -*-
+# name: Default PULP header 'all rights reserved'
+# key: header-pulp
+# --
+//-------------------------------------------------------------------------------
+// Title      : $1
+// Project    :
+// -----------------------------------------------------------------------------
+// File       : `(buffer-name)`
+// Author     : `(user-full-name)` -> otutaysalgir@gmail.com
+// Company    :
+// Created    : `(format-time-string "%d.%m.%Y")`
+// Last update:  
+// Platform   :
+//-----------------------------------------------------------------------------
+// Description: $2
+//-----------------------------------------------------------------------------
+// Copyright (c) `(format-time-string "%Y")`
+//-----------------------------------------------------------------------------
+// Revisions  :
+// Date        Version  Author  Description
+// `(format-time-string "%d.%m.%Y")`  1.0      `(user-full-name)`  Created
+//-----------------------------------------------------------------------------
+$0

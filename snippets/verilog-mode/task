@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+#name : new task
+#key : task
+#contributor : Manuel Eggimann
+# --
+task ${1:taskname}(${2:args});
+$0
+endtask

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+#name : union
+#key : union
+#contributor : Manuel Eggimann
+# --
+typedef union {
+$0
+} ${1:name_t};

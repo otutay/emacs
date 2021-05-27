@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+#name : if else
+#key : ife
+#contributor : Manuel Eggimann
+# --
+if (${1:condition}) begin
+$0
+end${2: else if (${3:other_condition}) begin
+
+end}${4: else begin
+
+end}
