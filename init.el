@@ -71,6 +71,7 @@
    autopair
    yasnippet
    format-all
+   doom-themes
 ))
 
 ;; Package manager and packages handler
@@ -117,6 +118,26 @@
 ;;(load-theme 'spacemacs-dark t)
 
 ;;(load-theme 'dracula t)
+
+
+
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+	doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-laserwave t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-vibrant") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 
 ;; dirty fix for having AC everywhere
@@ -419,10 +440,11 @@
  '(lsp-vhdl-server (quote hdl-checker))
  '(package-selected-packages
    (quote
-    (spacemacs-theme spacemacs-dark spacemacs-dark-theme tango-dark-theme cyberpunk-theme dumb-jump company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete))))
+    (doom-themes spacemacs-theme spacemacs-dark spacemacs-dark-theme tango-dark-theme cyberpunk-theme dumb-jump company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
