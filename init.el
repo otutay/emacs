@@ -1,3 +1,5 @@
+
+
 ;; add name and mail
 ;; code
 (setq user-full-name "osmant")
@@ -8,7 +10,8 @@
 ;; show corresponding parenthesis
 (show-paren-mode t)
 
-;; global delete button to delete
+;;truncate long lines
+(set-default 'truncate-lines t)
 
 ;;highlight tabulations
 (setq-default highlight-tabs t)
@@ -72,6 +75,7 @@
    yasnippet
    format-all
    doom-themes
+   hl-todo
 ))
 
 ;; Package manager and packages handler
@@ -114,7 +118,7 @@
 (install-wanted-packages)
 
 ;load solarized theme
-(load-theme 'solarized-dark t)
+;(load-theme 'solarized-dark t)
 ;;(load-theme 'spacemacs-dark t)
 
 ;;(load-theme 'dracula t)
@@ -127,14 +131,14 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
 	doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-laserwave t)
+  (load-theme 'doom-one t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-vibrant") ; use "doom-colors" for less minimal icon theme
+  (setq doom-themes-treemacs-theme "doom-one") ; use "doom-colors" for less minimal icon theme
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
@@ -153,6 +157,7 @@
 (require 'autopair)
 (autopair-global-mode) ;; enable autopair in all buffers
 
+;;vhdl process no reset
 (setq vhdl-reset-kind 'None)
 ;; flycheck en
 (global-flycheck-mode)
@@ -162,7 +167,7 @@
 
 (global-set-key [(control f3)] 'highlight-symbol)
 (global-set-key [f3] 'highlight-symbol-next)
-(global-set-key [(shift f3)] 'highlight-symbol-prev)
+(global-set-key [f2] 'highlight-symbol-prev)
 (global-set-key [(meta f3)] 'highlight-symbol-query-replace)
 
 ;; set ido mode
@@ -172,6 +177,8 @@
 ;; enable line number
 (global-linum-mode t)
 
+;;tool bar close
+(tool-bar-mode -1)
 ;; magit enable
 
 ;; multiple cursor enable and modify it
@@ -189,8 +196,6 @@
 ;; undo shortcut
 (global-set-key [f1] 'undo)
 
-;
-
 ;; shell shortcut
 (global-set-key [f6] 'shell)
 
@@ -198,7 +203,18 @@
 (global-set-key [f5] 'eval-buffer)
 
 
-;; ghdl setup
+;(use-package hl-todo
+;       :ensure t
+;       :custom-face
+;       (hl-todo ((t (:inherit hl-todo :italic t))))
+;       :hook ((prog-mode . hl-todo-mode)
+					;	      (yaml-mode . hl-todo-mode)))
+
+;; highlight todo
+(global-hl-todo-mode 1)
+
+;;save last buffers for startup
+;(desktop-save-mode 1)
 
 (when (not (package-installed-p 'use-package))
   (package-install 'use-package))
@@ -335,34 +351,32 @@
 
 (require 'flymake)										     ;;
 												     ;;
-(defadvice flymake-post-syntax-check								     ;;
-  (before flymake-force-check-was-interrupted)						     ;;
-  (setq flymake-check-was-interrupted t))							     ;;
-(ad-activate 'flymake-post-syntax-check)							     ;;
+;(defadvice flymake-post-syntax-check								     ;;
+;  (before flymake-force-check-was-interrupted)						     ;;
+;  (setq flymake-check-was-interrupted t))							     ;;
+;(ad-activate 'flymake-post-syntax-check)							     ;;
 												     ;;
 												     ;;
-(defun flymake-verilog-init()								     ;;
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy 'flymake-create-temp-inplace))	     ;;
-	 (main-file (file-relative-name temp-file (file-name-directory buffer-file-name)))	     ;;
-	 (sub-files (flymake-verilog-get-files)))						     ;;
-    (list "verilator_bin" (append (list "--lint-only -Wall" main-file) sub-files))))		     ;;
+;(defun flymake-verilog-init()								     ;;
+;  (let* ((temp-file (flymake-init-create-temp-buffer-copy 'flymake-create-temp-inplace))	     ;;;
+;	 (main-file (file-relative-name temp-file (file-name-directory buffer-file-name)))	     ;;;
+;	 (sub-files (flymake-verilog-get-files)))						     ;;
+;    (list "verilator_bin" (append (list "--lint-only -Wall" main-file) sub-files))))		     ;;
 												     ;;
-(defun flymake-verilog-get-files()								     ;;
-  (save-excursion										     ;;
-    (goto-char (point-min))									     ;;
-    (if (re-search-forward "verilog-library-files:( *\"\\([^)]+\\)\" *)" nil t)		     ;;
-	(split-string (match-string-no-properties 1) "\" *\"") (list))))			     ;;
+;(defun flymake-verilog-get-files()								     ;;
+;  (save-excursion										     ;;
+;    (goto-char (point-min))									     ;;
+;    (if (re-search-forward "verilog-library-files:( *\"\\([^)]+\\)\" *)" nil t)		     ;;;
+;	(split-string (match-string-no-properties 1) "\" *\"") (list))))			     ;;
 												     ;;
 ;; Verilog HDLのファイル拡張子と初期化関数を登録する						     ;;
-(push '(".+\\.s?v$" flymake-verilog-init) flymake-allowed-file-name-masks)			     ;;
+;(push '(".+\\.s?v$" flymake-verilog-init) flymake-allowed-file-name-masks)			     ;;
 												     ;;
 ;; エラーメッセージのパターンを登録する							     ;;
-(push '("^%.+: \\(.+\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)	     ;;
+;(push '("^%.+: \\(.+\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)	     ;;
 												     ;;
 ;; verilog-modeでflymakeを有効にする								     ;;
-(add-hook 'verilog-mode-hook '(lambda () (flymake-mode t)))					     ;;
-
-
+;(add-hook 'verilog-mode-hook '(lambda () (flymake-mode t)))					     ;;
 
 
 (use-package flycheck
@@ -393,6 +407,7 @@
 (yas-global-mode +1)
 
 
+(setq verilog-auto-newline nil)
 
 ;;ctags
 ;;(defun  create-tags-sv (dir-name)
@@ -437,14 +452,12 @@
  ;; If there is more than one, they won't work right.
  '(flycheck-ghdl-workdir
    "C:\\Users\\otutaysalgir\\Desktop\\osmant\\Codes\\Projects\\DDSWithEth\\srcRTL")
- '(lsp-vhdl-server (quote hdl-checker))
+ '(lsp-vhdl-server 'hdl-checker)
  '(package-selected-packages
-   (quote
-    (doom-themes spacemacs-theme spacemacs-dark spacemacs-dark-theme tango-dark-theme cyberpunk-theme dumb-jump company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete))))
+   '(hl-todo doom-themes spacemacs-theme spacemacs-dark spacemacs-dark-theme tango-dark-theme cyberpunk-theme dumb-jump company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
