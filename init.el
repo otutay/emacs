@@ -1,5 +1,3 @@
-
-
 ;; add name and mail
 ;; code
 (setq user-full-name "osmant")
@@ -67,15 +65,16 @@
    highlight-symbol
    flycheck
    auto-complete
-   autopair
+   ;autopair
    solarized-theme
    cyberpunk-theme
    spacemacs-theme
-   autopair
+   ;autopair
    yasnippet
    format-all
    doom-themes
    hl-todo
+   projectile
 ))
 
 ;; Package manager and packages handler
@@ -119,29 +118,10 @@
 
 ;load solarized theme
 ;(load-theme 'solarized-dark t)
-;;(load-theme 'spacemacs-dark t)
+(load-theme 'spacemacs-dark t)
 
 ;;(load-theme 'dracula t)
 
-
-
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-	doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-one") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
 
 
 ;; dirty fix for having AC everywhere
@@ -154,8 +134,8 @@
 
 
 ;; autopair open in all buffer
-(require 'autopair)
-(autopair-global-mode) ;; enable autopair in all buffers
+;(require 'autopair)
+;(autopair-global-mode) ;; enable autopair in all buffers
 
 ;;vhdl process no reset
 (setq vhdl-reset-kind 'None)
@@ -202,6 +182,8 @@
 ;; eval buffer
 (global-set-key [f5] 'eval-buffer)
 
+;; font size
+(set-face-attribute 'default nil :height 120)
 
 ;(use-package hl-todo
 ;       :ensure t
@@ -425,7 +407,14 @@
      ;(format "%s -f TAGS -e -R %s" "ctags-exuberant" (directory-file-name dir-name)))
      (format "%s -eR %s/*.vhd" "ctags" (directory-file-name dir-name)))
 	; (format "%s -f TAGS -eR %s" "ctags-exuberant" (directory-file-name dir-name)))
-  )
+    )
+
+
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+
 ;(defun find-tag-next ()
 ;  (interactive)
 ;  (find-tag last-tag t))
@@ -454,7 +443,7 @@
    "C:\\Users\\otutaysalgir\\Desktop\\osmant\\Codes\\Projects\\DDSWithEth\\srcRTL")
  '(lsp-vhdl-server 'hdl-checker)
  '(package-selected-packages
-   '(hl-todo doom-themes spacemacs-theme spacemacs-dark spacemacs-dark-theme tango-dark-theme cyberpunk-theme dumb-jump company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete)))
+   '(projectile projectile-files hl-todo doom-themes spacemacs-theme spacemacs-dark spacemacs-dark-theme tango-dark-theme cyberpunk-theme dumb-jump company-lsp lsp-ui company-quickhelp company-flx use-package lsp-mode switch-window multiple-cursors magit dracula-theme ido-vertical-mode ido-hacks highlight-symbol flycheck solarized-theme autopair auto-complete)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
